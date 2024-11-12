@@ -1,19 +1,19 @@
 use bevy::prelude::*;
 use bevy_asset::{ReflectAsset, UntypedAssetId};
 use bevy_egui::EguiContext;
+// use bevy_mod_picking::backends::egui::EguiPointer;
+// use bevy_mod_picking::prelude::*;
+use bevy_egui::EguiSet;
 use bevy_inspector_egui::bevy_inspector::hierarchy::{hierarchy_ui, SelectedEntities};
 use bevy_inspector_egui::bevy_inspector::{
     self, ui_for_entities_shared_components, ui_for_entity_with_children,
 };
 use bevy_inspector_egui::DefaultInspectorConfigPlugin;
-use std::any::TypeId;
-// use bevy_mod_picking::backends::egui::EguiPointer;
-// use bevy_mod_picking::prelude::*;
-use bevy_egui::EguiSet;
 use bevy_reflect::TypeRegistry;
 use bevy_render::camera::{CameraProjection, Viewport};
 use bevy_window::PrimaryWindow;
 use egui_dock::{DockArea, DockState, NodeIndex, Style};
+use std::any::TypeId;
 
 #[cfg(egui_dock_gizmo)]
 use transform_gizmo_egui::GizmoMode;
@@ -31,6 +31,7 @@ fn main() {
         .add_plugins(bevy_egui::EguiPlugin)
         // .add_plugins(bevy_mod_picking::plugins::DefaultPickingPlugins)
         .insert_resource(UiState::new())
+        .insert_resource(ClearColor(Color::srgba(0.0, 0.0, 0.0, 0.0)))
         .add_systems(Startup, setup)
         .add_systems(
             PostUpdate,
@@ -226,6 +227,10 @@ struct TabViewer<'a> {
 impl egui_dock::TabViewer for TabViewer<'_> {
     type Tab = EguiWindow;
 
+    fn title(&mut self, window: &mut Self::Tab) -> egui_dock::egui::WidgetText {
+        format!("{window:?}").into()
+    }
+
     fn ui(&mut self, ui: &mut egui_dock::egui::Ui, window: &mut Self::Tab) {
         let type_registry = self.world.resource::<AppTypeRegistry>().0.clone();
         let type_registry = type_registry.read();
@@ -271,10 +276,6 @@ impl egui_dock::TabViewer for TabViewer<'_> {
                 }
             },
         }
-    }
-
-    fn title(&mut self, window: &mut Self::Tab) -> egui_dock::egui::WidgetText {
-        format!("{window:?}").into()
     }
 
     fn clear_background(&self, window: &Self::Tab) -> bool {
@@ -411,71 +412,73 @@ fn setup(
     // left - red
     let mut transform = Transform::from_xyz(-box_offset, box_offset, 0.0);
     transform.rotate(Quat::from_rotation_z(std::f32::consts::FRAC_PI_2));
-    commands.spawn(PbrBundle {
-        mesh: meshes.add(Cuboid::new(box_size, box_thickness, box_size)),
-        transform,
-        material: materials.add(StandardMaterial {
+
+    commands.spawn((
+        Mesh3d(meshes.add(Cuboid::new(box_size, box_thickness, box_size))),
+        MeshMaterial3d(materials.add(StandardMaterial {
             base_color: Color::srgb(0.63, 0.065, 0.05),
             ..Default::default()
-        }),
-        ..Default::default()
-    });
+        })),
+        transform,
+    ));
+
     // right - green
     let mut transform = Transform::from_xyz(box_offset, box_offset, 0.0);
     transform.rotate(Quat::from_rotation_z(std::f32::consts::FRAC_PI_2));
-    commands.spawn(PbrBundle {
-        mesh: meshes.add(Cuboid::new(box_size, box_thickness, box_size)),
-        transform,
-        material: materials.add(StandardMaterial {
+
+    commands.spawn((
+        Mesh3d(meshes.add(Cuboid::new(box_size, box_thickness, box_size))),
+        MeshMaterial3d(materials.add(StandardMaterial {
             base_color: Color::srgb(0.14, 0.45, 0.091),
             ..Default::default()
-        }),
-        ..Default::default()
-    });
+        })),
+        transform,
+    ));
+
     // bottom - white
-    commands.spawn(PbrBundle {
-        mesh: meshes.add(Cuboid::new(
+    commands.spawn((
+        Mesh3d(meshes.add(Cuboid::new(
             box_size + 2.0 * box_thickness,
             box_thickness,
             box_size,
-        )),
-        material: materials.add(StandardMaterial {
+        ))),
+        MeshMaterial3d(materials.add(StandardMaterial {
             base_color: Color::srgb(0.725, 0.71, 0.68),
             ..Default::default()
-        }),
-        ..Default::default()
-    });
+        })),
+    ));
+
     // top - white
     let transform = Transform::from_xyz(0.0, 2.0 * box_offset, 0.0);
-    commands.spawn(PbrBundle {
-        mesh: meshes.add(Cuboid::new(
+    commands.spawn((
+        Mesh3d(meshes.add(Cuboid::new(
             box_size + 2.0 * box_thickness,
             box_thickness,
             box_size,
-        )),
-        transform,
-        material: materials.add(StandardMaterial {
+        ))),
+        MeshMaterial3d(materials.add(StandardMaterial {
             base_color: Color::srgb(0.725, 0.71, 0.68),
             ..Default::default()
-        }),
-        ..Default::default()
-    });
+        })),
+        transform,
+    ));
+
     // back - white
     let mut transform = Transform::from_xyz(0.0, box_offset, -box_offset);
     transform.rotate(Quat::from_rotation_x(std::f32::consts::FRAC_PI_2));
-    commands.spawn(PbrBundle {
-        mesh: meshes.add(Cuboid::new(
+
+    commands.spawn((
+        Mesh3d(meshes.add(Cuboid::new(
             box_size + 2.0 * box_thickness,
             box_thickness,
             box_size + 2.0 * box_thickness,
-        )),
-        transform,
-        material: materials.add(StandardMaterial {
+        ))),
+        MeshMaterial3d(materials.add(StandardMaterial {
             base_color: Color::srgb(0.725, 0.71, 0.68),
             ..Default::default()
-        }),
-        ..Default::default()
-    });
+        })),
+        transform,
+    ));
 
     // ambient light
     commands.insert_resource(AmbientLight {
@@ -484,48 +487,44 @@ fn setup(
     });
     // top light
     commands
-        .spawn(PbrBundle {
-            mesh: meshes.add(Plane3d::default().mesh().size(0.4, 0.4)),
-            transform: Transform::from_matrix(Mat4::from_scale_rotation_translation(
+        .spawn((
+            Mesh3d(meshes.add(Plane3d::default().mesh().size(0.4, 0.4))),
+            MeshMaterial3d(materials.add(StandardMaterial {
+                base_color: Color::WHITE,
+                emissive: LinearRgba::WHITE * 100.0,
+                ..Default::default()
+            })),
+            Transform::from_matrix(Mat4::from_scale_rotation_translation(
                 Vec3::ONE,
                 Quat::from_rotation_x(std::f32::consts::PI),
                 Vec3::new(0.0, box_size + 0.5 * box_thickness, 0.0),
             )),
-            material: materials.add(StandardMaterial {
-                base_color: Color::WHITE,
-                emissive: LinearRgba::WHITE * 100.0,
-                ..Default::default()
-            }),
-            ..Default::default()
-        })
+        ))
         .with_children(|builder| {
-            builder.spawn(PointLightBundle {
-                point_light: PointLight {
+            builder.spawn((
+                PointLight {
                     color: Color::WHITE,
                     intensity: 25000.0,
                     ..Default::default()
                 },
-                transform: Transform::from_translation((box_thickness + 0.05) * Vec3::Y),
-                ..Default::default()
-            });
+                Transform::from_translation((box_thickness + 0.05) * Vec3::Y),
+            ));
         });
+
     // directional light
-    commands.spawn(DirectionalLightBundle {
-        directional_light: DirectionalLight {
+    commands.spawn((
+        DirectionalLight {
             illuminance: 2000.0,
             ..default()
         },
-        transform: Transform::from_rotation(Quat::from_rotation_x(-std::f32::consts::PI / 2.0)),
-        ..Default::default()
-    });
+        Transform::from_rotation(Quat::from_rotation_x(-std::f32::consts::PI / 2.0)),
+    ));
 
     // camera
     commands.spawn((
-        Camera3dBundle {
-            transform: Transform::from_xyz(0.0, box_offset, 4.0)
-                .looking_at(Vec3::new(0.0, box_offset, 0.0), Vec3::Y),
-            ..Default::default()
-        },
+        Camera3d::default(),
+        Transform::from_xyz(0.0, box_offset, 4.0)
+            .looking_at(Vec3::new(0.0, box_offset, 0.0), Vec3::Y),
         MainCamera,
         // PickRaycastSource,
     ));

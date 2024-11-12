@@ -9,6 +9,7 @@
     clippy::too_many_arguments,
     clippy::type_complexity,
 )]
+#![allow(warnings)]
 
 //! This crate contains
 //! - general purpose machinery for displaying [`Reflect`](bevy_reflect::Reflect) values in [`reflect_inspector`],

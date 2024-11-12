@@ -1,3 +1,19 @@
 [workspace]
 resolver = "2"
 members = ["crates/*"]
+
+[workspace.dependencies]
+bevy_app = { version = "0.15.0-rc.3" }
+bevy_asset = { version = "0.15.0-rc.3" }
+bevy_color = { version = "0.15.0-rc.3" }
+bevy_core = { version = "0.15.0-rc.3" }
+bevy_ecs = { version = "0.15.0-rc.3" }
+bevy_hierarchy = { version = "0.15.0-rc.3" }
+bevy_log = { version = "0.15.0-rc.3" }
+bevy_math = { version = "0.15.0-rc.3" }
+bevy_reflect = { version = "0.15.0-rc.3" }
+bevy_state = { version = "0.15.0-rc.3" }
+bevy_time = { version = "0.15.0-rc.3" }
+bevy_utils = { version = "0.15.0-rc.3" }
+bevy_window = { version = "0.15.0-rc.3" }
+bevy_egui = {git = "https://github.com/ptsd/bevy_egui.git", branch = "bevy-0.15"}

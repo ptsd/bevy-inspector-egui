@@ -29,26 +29,26 @@ features = ["winit/x11"]
 winit = { version = "0.30.0", default-features = false }
 
 bevy-inspector-egui-derive = { version = "0.27.0", path = "../bevy-inspector-egui-derive" }
-bevy_app = { version = "0.14.0" }
-bevy_asset = { version = "0.14.0" }
-bevy_color = { version = "0.14.0" }
-bevy_core = { version = "0.14.0" }
-bevy_ecs = { version = "0.14.0" }
-bevy_hierarchy = { version = "0.14.0" }
-bevy_log = { version = "0.14.0" }
-bevy_math = { version = "0.14.0" }
-bevy_reflect = { version = "0.14.0" }
-bevy_state = { version = "0.14.0" }
-bevy_time = { version = "0.14.0" }
-bevy_utils = { version = "0.14.0" }
-bevy_window = { version = "0.14.0" }
+bevy_app.workspace=true
+bevy_asset.workspace=true
+bevy_color.workspace=true
+bevy_core.workspace=true
+bevy_ecs.workspace=true
+bevy_hierarchy.workspace=true
+bevy_log.workspace=true
+bevy_math.workspace=true
+bevy_reflect.workspace=true
+bevy_state.workspace=true
+bevy_time.workspace=true
+bevy_utils.workspace=true
+bevy_window.workspace=true
 
-bevy_render = { version = "0.14", optional = true }
-bevy_core_pipeline = { version = "0.14", optional = true }
-bevy_pbr = { version = "0.14", optional = true }
+bevy_render = { version = "0.15.0-rc.3", optional = true }
+bevy_core_pipeline = { version = "0.15.0-rc.3", optional = true }
+bevy_pbr = { version = "0.15.0-rc.3", optional = true }
 
 egui = "0.29"
-bevy_egui = { version = "0.30", default-features = false }
+bevy_egui.workspace = true
 
 bytemuck = "1.16.0"
 image = { version = "0.25", default-features = false }
@@ -58,7 +58,7 @@ smallvec = "1.10"
 fuzzy-matcher = "0.3.7"
 
 [dev-dependencies]
-bevy = { version = "0.14.0", default-features = false, features = [
+bevy = { version = "0.15.0-rc.3", default-features = false, features = [
     "x11",
     "bevy_winit",
     "bevy_pbr",
@@ -71,54 +71,54 @@ bevy = { version = "0.14.0", default-features = false, features = [
     "ktx2",
 ] }
 egui_dock = "0.14"
-# transform-gizmo-egui = "0.1"
-# bevy_mod_picking = { git = "https://github.com/aevyrie/bevy_mod_picking", rev = "554649a951689dce66d0d759839b326874e8826f", default-features = false, features = ["backend_raycast", "backend_egui", "backend_sprite"] }
-# bevy_framepace = "0.11"
-
-
-[[example]]
-name = "inspector_options"
-path = "examples/basic/inspector_options.rs"
-
-[[example]]
-name = "custom_type_ui"
-path = "examples/basic/custom_type_ui.rs"
-
-[[example]]
-name = "resource_inspector_manual"
-path = "examples/basic/resource_inspector_manual.rs"
-
-[[example]]
-name = "resource_inspector"
-path = "examples/quick/resource_inspector.rs"
-
-[[example]]
-name = "filter_query_inspector"
-path = "examples/quick/filter_query_inspector.rs"
-
-[[example]]
-name = "asset_inspector"
-path = "examples/quick/asset_inspector.rs"
-
+## transform-gizmo-egui = "0.1"
+## bevy_mod_picking = { git = "https://github.com/aevyrie/bevy_mod_picking", rev = "554649a951689dce66d0d759839b326874e8826f", default-features = false, features = ["backend_raycast", "backend_egui", "backend_sprite"] }
+## bevy_framepace = "0.11"
+#
+#
+#[[example]]
+#name = "inspector_options"
+#path = "examples/basic/inspector_options.rs"
+#
+#[[example]]
+#name = "custom_type_ui"
+#path = "examples/basic/custom_type_ui.rs"
+#
+#[[example]]
+#name = "resource_inspector_manual"
+#path = "examples/basic/resource_inspector_manual.rs"
+#
+#[[example]]
+#name = "resource_inspector"
+#path = "examples/quick/resource_inspector.rs"
+#
+#[[example]]
+#name = "filter_query_inspector"
+#path = "examples/quick/filter_query_inspector.rs"
+#
+#[[example]]
+#name = "asset_inspector"
+#path = "examples/quick/asset_inspector.rs"
+#
 [[example]]
 name = "world_inspector"
 path = "examples/quick/world_inspector.rs"
-
-[[example]]
-name = "world_inspector_assets"
-path = "examples/quick/world_inspector_assets.rs"
-
-[[example]]
-name = "state_inspector"
-path = "examples/quick/state_inspector.rs"
-
+#
+#[[example]]
+#name = "world_inspector_assets"
+#path = "examples/quick/world_inspector_assets.rs"
+#
+#[[example]]
+#name = "state_inspector"
+#path = "examples/quick/state_inspector.rs"
+#
 [[example]]
 name = "egui_dock"
 path = "examples/integrations/egui_dock.rs"
-
-[[example]]
-name = "side_panel"
-path = "examples/integrations/side_panel.rs"
+#
+#[[example]]
+#name = "side_panel"
+#path = "examples/integrations/side_panel.rs"
 
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ['cfg(egui_dock_gizmo)'] }

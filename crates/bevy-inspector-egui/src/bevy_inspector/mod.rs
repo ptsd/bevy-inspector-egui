@@ -367,15 +367,16 @@ fn self_or_children_satisfy_filter(
         name.to_lowercase().contains(filter)
     };
     self_matches || {
-        world
-            .query::<&Children>()
-            .get(world, entity)
-            .map(|children| children.to_vec())
-            .is_ok_and(|children| {
-                children
-                    .iter()
-                    .any(|child| self_or_children_satisfy_filter(world, *child, filter, is_fuzzy))
-            })
+        false
+        // world
+        //     .query::<&Children>()
+        //     .get(world, entity)
+        //     .map(|children| children.to_vec())
+        //     .is_ok_and(|children| {
+        //         children
+        //             .iter()
+        //             .any(|child| self_or_children_satisfy_filter(world, *child, filter, is_fuzzy))
+        //     })
     }
 }
 
